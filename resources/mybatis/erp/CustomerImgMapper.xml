@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CustomerImgMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		ERP_CUSTOMERIMG
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		CDESCRIPTION,	
+		CTIME,	
+		CUSTOMER_ID,	
+		CUSTOMERIMG_ID,
+		MAINBOARD,
+		DISPLAYCARD,
+		STORAGE,
+		CPU,
+		MEMORY,
+		DISK,
+		VOIDCARD,
+		DISPLAYER,
+		KEYBOARD,
+		RADIATOR,
+		PRINTER,
+		OTHERS,
+		REMARK1,
+		REMARK2,
+		CODE,
+		STATUS
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{CDESCRIPTION},	
+		#{CTIME},	
+		#{CUSTOMER_ID},	
+		#{CUSTOMERIMG_ID},
+		#{MAINBOARD},
+		#{DISPLAYCARD},
+		#{STORAGE},
+		#{CPU},
+		#{MEMORY},
+		#{DISK},
+		#{VOIDCARD},
+		#{DISPLAYER},
+		#{KEYBOARD},
+		#{RADIATOR},
+		#{PRINTER},
+		#{OTHERS},
+		#{REMARK1},
+		#{REMARK2},
+		#{CODE},
+		#{STATUS}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			CUSTOMERIMG_ID = #{CUSTOMERIMG_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			CDESCRIPTION = #{CDESCRIPTION},
+			MAINBOARD =	#{MAINBOARD},
+		    DISPLAYCARD = #{DISPLAYCARD},
+		    STORAGE = #{STORAGE},
+		    CPU = #{CPU},
+		    MEMORY = #{MEMORY},
+		    DISK = #{DISK},
+		    VOIDCARD = #{VOIDCARD},
+		    DISPLAYER = #{DISPLAYER},
+		    KEYBOARD = #{KEYBOARD},
+		    RADIATOR = #{RADIATOR},
+		    PRINTER = #{PRINTER},
+		    OTHERS = #{OTHERS},
+		    REMARK1 = #{REMARK1},
+		    REMARK2 = #{REMARK2},
+		    STATUS = #{STATUS},
+		    CUSTOMERIMG_ID = CUSTOMERIMG_ID
+		where 
+		CUSTOMERIMG_ID = #{CUSTOMERIMG_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			CUSTOMERIMG_ID = #{CUSTOMERIMG_ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			a.CDESCRIPTION,	
+			a.CTIME,	
+			a.CUSTOMER_ID,	
+			a.CUSTOMERIMG_ID,	
+			a.MAINBOARD,	
+			a.DISPLAYCARD,	
+			a.STORAGE,	
+			a.CPU,	
+			a.MEMORY,	
+			a.DISK,	
+			a.VOIDCARD,
+			a.DISPLAYER,	
+			a.KEYBOARD,
+			a.RADIATOR,
+			a.PRINTER,
+			a.OTHERS,
+			a.REMARK1,
+			a.REMARK2,
+			a.CODE,
+			a.STATUS,
+			b.REMARKS
+		from 
+		<include refid="tableName"></include>a
+		left join ERP_PLAN b
+		on 
+			a.STATUS = b.PLAN_ID
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+			
+					CODE LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					STATUS LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				
+				)
+		</if>
+		<if test="pd.STATUS!=null and pd.STATUS!=''">
+			and a.STATUS = #{pd.STATUS} 
+		</if>
+		and CUSTOMER_ID = #{pd.CUSTOMER_ID}
+		order by CTIME desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			CUSTOMERIMG_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

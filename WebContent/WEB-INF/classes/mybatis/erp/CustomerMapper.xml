@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CustomerMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		ERP_CUSTOMER
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		NAME,	
+		AGE,	
+		PHONE,	
+		ADDRESS,	
+		QQ,	
+		WEIXIN,	
+		CTIME,	
+		MONEY,	
+		LEVEL,	
+		REMARKS1,	
+		REMARKS2,
+		USERNAME,	
+		CUSTOMER_ID,
+		DEVICE,
+		PLAN,
+		PAY,
+		COMPANY_ID,
+		INCOME,
+		OUTMONEY,
+		BILLFEE,
+		BILLSTATUS,
+		BILLTIME
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{NAME},	
+		#{AGE},	
+		#{PHONE},	
+		#{ADDRESS},	
+		#{QQ},	
+		#{WEIXIN},	
+		#{CTIME},	
+		#{MONEY},	
+		#{LEVEL},	
+		#{REMARKS1},	
+		#{REMARKS2},
+		#{USERNAME},	
+		#{CUSTOMER_ID},
+		#{DEVICE},
+		#{PLAN},
+		#{PAY},
+		#{COMPANY_ID},
+		#{INCOME},
+		#{OUTMONEY},
+		#{BILLFEE},
+	    #{BILLSTATUS},
+	    #{BILLTIME}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			CUSTOMER_ID = #{CUSTOMER_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			NAME = #{NAME},
+			AGE = #{AGE},
+			PHONE = #{PHONE},
+			ADDRESS = #{ADDRESS},
+			QQ = #{QQ},
+			WEIXIN = #{WEIXIN},
+			MONEY = #{MONEY},
+			LEVEL = #{LEVEL},
+			REMARKS1 = #{REMARKS1},
+		 	REMARKS2 = #{REMARKS2},
+		    CUSTOMER_ID = CUSTOMER_ID,
+			DEVICE = #{DEVICE},
+			PLAN = #{PLAN},
+			PAY = #{PAY},
+			INCOME = #{INCOME},
+			OUTMONEY = #{OUTMONEY},
+			BILLFEE = #{BILLFEE},
+			BILLSTATUS = #{BILLSTATUS},
+			BILLTIME = #{BILLTIME}
+			
+		where 
+		CUSTOMER_ID = #{CUSTOMER_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			CUSTOMER_ID = #{CUSTOMER_ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			a.NAME,	
+			a.AGE,	
+			a.PHONE,	
+			a.ADDRESS,	
+			a.QQ,	
+			a.WEIXIN,	
+			a.CTIME,	
+			a.MONEY,	
+			a.LEVEL,	
+			a.REMARKS1,	
+			a.REMARKS2,
+			a.USERNAME,	
+			a.CUSTOMER_ID,
+			a.DEVICE,
+			a.PLAN,
+			a.PAY,
+			a.COMPANY_ID,
+			a.INCOME,
+		    a.OUTMONEY,
+		    a.BILLFEE,
+		    a.BILLSTATUS,
+		    a.BILLTIME,			
+			c.REMARKS,
+			d.REMARKS PEOPLE
+		from 
+		<include refid="tableName"></include> a
+		left join ERP_PLAN c
+		on 
+			a.PLAN = c.PLAN_ID
+		left join ERP_REMARKS d
+		on 
+			a.REMARKS1 = d.REMARKS_ID
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					a.NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					a.PHONE LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or 
+					a.ADDRESS LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or 
+					a.WEIXIN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or 
+					a.REMARKS1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or 
+					a.USERNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		<if test="pd.lastStart!=null and pd.lastStart!=''">
+			and a.CTIME &gt;= #{pd.lastStart} 
+		</if>
+		<if test="pd.lastEnd!=null and pd.lastEnd!=''">
+			and a.CTIME &lt;= #{pd.lastEnd} 
+		</if>
+		<if test="pd.USERNAME!=null and pd.USERNAME!=''">
+			and a.USERNAME = #{pd.USERNAME} 
+		</if>
+		<if test="pd.PLAN!=null and pd.PLAN!=''">
+			and a.PLAN = #{pd.PLAN} 
+		</if>
+		<if test="pd.REMARKS1!=null and pd.REMARKS1!=''">
+			and a.REMARKS1 = #{pd.REMARKS1} 
+		</if>
+		<if test="pd.BILLSTATUS!=null and pd.BILLSTATUS!=''">
+			and a.BILLSTATUS = #{pd.BILLSTATUS} 
+		</if>
+		order by a.CTIME desc
+	</select>
+	
+		<!-- 列表-账单 -->
+	<select id="billListPage" parameterType="page" resultType="pd">
+		select
+			a.NAME,	
+			a.AGE,	
+			a.PHONE,	
+			a.ADDRESS,	
+			a.QQ,	
+			a.WEIXIN,	
+			a.CTIME,	
+			a.MONEY,	
+			a.LEVEL,	
+			a.REMARKS1,	
+			a.REMARKS2,
+			a.USERNAME,	
+			a.CUSTOMER_ID,
+			a.DEVICE,
+			a.PLAN,
+			a.PAY,
+			a.COMPANY_ID,
+			a.INCOME,
+		    a.OUTMONEY,
+		    a.BILLFEE,
+		    a.BILLSTATUS,
+		    a.BILLTIME,
+			c.REMARKS,
+			d.REMARKS PEOPLE
+		from 
+		<include refid="tableName"></include> a
+		left join ERP_PLAN c
+		on 
+			a.PLAN = c.PLAN_ID
+		left join ERP_REMARKS d
+		on 
+			a.REMARKS1 = d.REMARKS_ID
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					a.NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 										
+					a.WEIXIN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					
+				)
+		</if>
+		<if test="pd.lastStart!=null and pd.lastStart!=''">
+			and a.BILLTIME &gt;= #{pd.lastStart} 
+		</if>
+		<if test="pd.lastEnd!=null and pd.lastEnd!=''">
+			and a.BILLTIME &lt;= #{pd.lastEnd} 
+		</if>
+		<if test="pd.USERNAME!=null and pd.USERNAME!=''">
+			and a.USERNAME = #{pd.USERNAME} 
+		</if>
+		<if test="pd.PLAN!=null and pd.PLAN!=''">
+			and a.PLAN = #{pd.PLAN} 
+		</if>
+		<if test="pd.REMARKS1!=null and pd.REMARKS1!=''">
+			and a.REMARKS1 = #{pd.REMARKS1} 
+		</if>
+		<if test="pd.BILLSTATUS!=null and pd.BILLSTATUS!=''">
+			and a.BILLSTATUS = #{pd.BILLSTATUS} 
+		</if>
+		and a.BILLSTATUS in (1,2)
+		order by a.BILLTIME desc
+	</select>
+	
+		<!-- 列表-关联客户 -->
+	<select id="companylistPage" parameterType="page" resultType="pd">
+		select
+			a.NAME,	
+			a.AGE,	
+			a.PHONE,	
+			a.ADDRESS,	
+			a.QQ,	
+			a.WEIXIN,	
+			a.CTIME,	
+			a.MONEY,	
+			a.LEVEL,	
+			a.REMARKS1,	
+			a.REMARKS2,
+			a.USERNAME,	
+			a.CUSTOMER_ID,
+			a.DEVICE,
+			a.PLAN,
+			a.PAY,
+			a.COMPANY_ID,
+			a.INCOME,
+		    a.OUTMONEY,
+		    a.BILLFEE,
+		    a.BILLSTATUS,
+		    a.BILLTIME,
+			c.REMARKS
+		from 
+		<include refid="tableName"></include> a
+		left join ERP_PLAN c
+		on 
+			a.PLAN = c.PLAN_ID
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					a.NAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					a.PHONE LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or 
+					a.ADDRESS LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or 
+					a.WEIXIN LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or 
+					a.REMARKS1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					or 
+					a.USERNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		<if test="pd.lastStart!=null and pd.lastStart!=''">
+			and a.CTIME &gt;= #{pd.lastStart} 
+		</if>
+		<if test="pd.lastEnd!=null and pd.lastEnd!=''">
+			and a.CTIME &lt;= #{pd.lastEnd} 
+		</if>
+		<if test="pd.USERNAME!=null and pd.USERNAME!=''">
+			and a.USERNAME = #{pd.USERNAME} 
+		</if>
+		<if test="pd.PLAN!=null and pd.PLAN!=''">
+			and a.PLAN = #{pd.PLAN} 
+		</if>
+		<if test="pd.BILLSTATUS!=null and pd.BILLSTATUS!=''">
+			and a.BILLSTATUS = #{pd.BILLSTATUS} 
+		</if>
+		and COMPANY_ID = #{pd.COMPANY_ID}
+		order by a.CTIME desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where
+			1=1
+		<if test="USERNAME!=null and USERNAME!=''">
+			and USERNAME = #{USERNAME} 
+		</if>
+		<if test="days!=null and days!=''"><!-- 几天内 -->
+			and DATE_SUB(CURDATE(), INTERVAL ${days} DAY) &lt;= date(CTIME)
+		</if>
+	</select>
+		<!-- 列表-关联客户(全部) -->
+	<select id="listCompanyAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where
+			1=1
+		<if test="USERNAME!=null and USERNAME!=''">
+			and USERNAME = #{USERNAME} 
+		</if>
+		and COMPANY_ID = #{COMPANY_ID}
+		<if test="days!=null and days!=''"><!-- 几天内 -->
+			and DATE_SUB(CURDATE(), INTERVAL ${days} DAY) &lt;= date(CTIME)
+		</if>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			CUSTOMER_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 当天结算信息汇总分析 -->
+	<select id="dayBillSum" parameterType="pd" resultType="pd">
+		select
+			count(*) NUMBER,sum(MONEY) MONEY,sum(INCOME) INCOME,sum(OUTMONEY) OUTMONEY,sum(BILLFEE) BILLFEE,sum(QQ) QQ
+		from 
+		<include refid="tableName"></include> a
+		where a.USERNAME = #{USERNAME}
+		and a.BILLSTATUS in (1,2) 
+		and to_days(a.BILLTIME) = to_days(now())
+	</select>
+	
+	<!-- 30天内结算信息汇总分析 -->
+	<select id="manyDaySum" parameterType="pd" resultType="pd">
+		select
+			count(*) NUMBER,sum(MONEY) MONEY,sum(INCOME) INCOME,sum(OUTMONEY) OUTMONEY,sum(BILLFEE) BILLFEE,sum(QQ) QQ
+		from 
+		<include refid="tableName"></include> a
+		where a.USERNAME = #{USERNAME}
+		and a.BILLSTATUS in (1,2) 
+		<if test="days!=null and days!=''"><!-- 几天内 -->
+			and DATE_SUB(CURDATE(), INTERVAL ${days} DAY) &lt;= date(a.BILLTIME)
+		</if>
+	</select>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>
