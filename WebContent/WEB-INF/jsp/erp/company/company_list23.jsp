@@ -31,7 +31,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="company/list.do" method="post" name="Form" id="Form">
+						<form action="company/list23.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
@@ -44,23 +44,18 @@
 								</td>
 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;height:34px;" placeholder="开始日期" title="开始日期"/></td>
 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;height:34px;" placeholder="结束日期" title="结束日期"/></td>
-								<td style="padding-left:5px">
-									<select class="chosen-select form-control" name="LEVEL" id="LEVEL" data-placeholder="专家类型" style="vertical-align:top;width:200px;" >
+<%-- 								<td style="padding-left:5px">
+									<select class="chosen-select form-control" name="LEVEL" id="LEVEL" data-placeholder="专家类型" style="vertical-align:top;width:120px;" >
 										<option value=""></option>
 										<c:forEach items="${companyTypeList}" var="var">
 											<option value="${var.LEVEL_ID }" <c:if test="${var.LEVEL_ID == pd.LEVEL }">selected</c:if>>${var.TITLE }</option>
 										</c:forEach>
 									</select>
-								</td>
+								</td> --%>
 								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-app btn-light btn-xs" onclick="tosearch();"  title="检索">查询</a></td>
 								</c:if>
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-app btn-light btn-xs" onclick="random();"  title="检索">随机抽取</a></td>
-								<td style="vertical-align:top;padding-left:20px;padding-top:3px;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-white btn-success btn-round" onclick="add();"><i class="ace-icon glyphicon glyphicon-plus"></i>专家入库</a>
-									</c:if>
-								</td>
 								<%--导出功能预留 <c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if> --%>
 							</tr>
 						</table>
@@ -180,7 +175,9 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-
+<%-- 									<c:if test="${QX.add == 1 }">
+									<a class="btn btn-white btn-success btn-round" onclick="add();"><i class="ace-icon glyphicon glyphicon-plus"></i>专家入库</a>
+									</c:if> --%>
 <%-- 未开放批量删除功能				    <c:if test="${QX.del == 1 }">
 									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
 									</c:if> --%>
@@ -357,7 +354,7 @@
 			bootbox.confirm("即将随机抽取一位专家!", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>company/random.do";
+					var url = "<%=basePath%>company/random3.do?random=23";
 					$.get(url,function(data){
 						if("success" == data.result){
 							top.hangge();

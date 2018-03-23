@@ -293,6 +293,12 @@ public class CompanyController extends BaseController {
 		break;
 		case "21":pds.put("LEVEL", "aaaaaaaaaaaaaaaaaaaaa");
 		break;
+		case "22":pds.put("LEVEL", "aaaaaaaaaaaaaaaaaaaaaa");
+		break;
+		case "23":pds.put("LEVEL", "aaaaaaaaaaaaaaaaaaaaaaa");
+		break;
+		case "24":pds.put("LEVEL", "aaaaaaaaaaaaaaaaaaaaaaaa");
+		break;
 		
 		}
 		
@@ -1174,6 +1180,141 @@ public class CompanyController extends BaseController {
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
 		return mv;
 	}
+	
+	/**列表22-建筑工人技术
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/list22")
+	public ModelAndView list22(Page page) throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"列表Customer");
+		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords");				//关键词检索条件
+		if(null != keywords && !"".equals(keywords)){
+			pd.put("keywords", keywords.trim());
+		}
+		String lastLoginStart = pd.getString("lastStart");	//开始时间
+		String lastLoginEnd = pd.getString("lastEnd");		//结束时间
+		if(lastLoginStart != null && !"".equals(lastLoginStart)){
+			pd.put("lastStart", lastLoginStart+" 00:00:00");
+		}
+		if(lastLoginEnd != null && !"".equals(lastLoginEnd)){
+			pd.put("lastEnd", lastLoginEnd+" 00:00:00");
+		} 
+		pd.put("USERNAME", Jurisdiction.getUsername());
+		//建筑工人技术
+		pd.put("LEVEL", "aaaaaaaaaaaaaaaaaaaaaa");
+		   
+		List<PageData>	companyTypeList = companyTypeService.listAll(pd);
+		page.setPd(pd);
+		List<PageData>	varList = companyService.list(page);	//列出Customer列表
+		mv.setViewName("erp/company/company_list22");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("companyTypeList", companyTypeList);
+		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		return mv;
+	}
+	
+	/**列表23-特种作业人员
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/list23")
+	public ModelAndView list23(Page page) throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"列表Customer");
+		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords");				//关键词检索条件
+		if(null != keywords && !"".equals(keywords)){
+			pd.put("keywords", keywords.trim());
+		}
+		String lastLoginStart = pd.getString("lastStart");	//开始时间
+		String lastLoginEnd = pd.getString("lastEnd");		//结束时间
+		if(lastLoginStart != null && !"".equals(lastLoginStart)){
+			pd.put("lastStart", lastLoginStart+" 00:00:00");
+		}
+		if(lastLoginEnd != null && !"".equals(lastLoginEnd)){
+			pd.put("lastEnd", lastLoginEnd+" 00:00:00");
+		} 
+		pd.put("USERNAME", Jurisdiction.getUsername());
+		//特种作业人员
+		pd.put("LEVEL", "aaaaaaaaaaaaaaaaaaaaaaa");
+		   
+		List<PageData>	companyTypeList = companyTypeService.listAll(pd);
+		page.setPd(pd);
+		List<PageData>	varList = companyService.list(page);	//列出Customer列表
+		mv.setViewName("erp/company/company_list23");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("companyTypeList", companyTypeList);
+		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		return mv;
+	}
+	
+	/**列表24-现场专业人员
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/list24")
+	public ModelAndView list24(Page page) throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"列表Customer");
+		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords");				//关键词检索条件
+		if(null != keywords && !"".equals(keywords)){
+			pd.put("keywords", keywords.trim());
+		}
+		String lastLoginStart = pd.getString("lastStart");	//开始时间
+		String lastLoginEnd = pd.getString("lastEnd");		//结束时间
+		if(lastLoginStart != null && !"".equals(lastLoginStart)){
+			pd.put("lastStart", lastLoginStart+" 00:00:00");
+		}
+		if(lastLoginEnd != null && !"".equals(lastLoginEnd)){
+			pd.put("lastEnd", lastLoginEnd+" 00:00:00");
+		} 
+		pd.put("USERNAME", Jurisdiction.getUsername());
+		//现场专业人员
+		pd.put("LEVEL", "aaaaaaaaaaaaaaaaaaaaaaaa");
+		   
+		List<PageData>	companyTypeList = companyTypeService.listAll(pd);
+		page.setPd(pd);
+		List<PageData>	varList = companyService.list(page);	//列出Customer列表
+		mv.setViewName("erp/company/company_list24");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("companyTypeList", companyTypeList);
+		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		return mv;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/**去新增页面
 	 * @param
